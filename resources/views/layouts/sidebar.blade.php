@@ -1,3 +1,6 @@
+@php
+    $user = auth()->user();
+@endphp
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
@@ -25,9 +28,14 @@
     <div class="sidebar-heading">
         Transaksi
     </div> --}}
-
-    <!-- Menu Admin -->
     <li class="nav-item">
+        <a class="nav-link" href="{{ route('transactions.view') }}">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Transaksi</span></a>
+    </li>
+@if($user->getRoleNames()->contains('administrator'))
+    <!-- Menu Admin -->
+    {{-- <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
             aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>
@@ -40,13 +48,9 @@
                 <a class="collapse-item" href="cards.html">Cards</a>
             </div>
         </div>
-    </li>
+    </li> --}}
     <!-- Nav Item - Charts -->
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('transactions.view') }}">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Transaksi</span></a>
-    </li>
+    
 
     <li class="nav-item">
         <a class="nav-link" href="{{ route('transactions.view') }}">
@@ -59,10 +63,10 @@
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Users</span></a>
     </li>
-
+@elseif($user->getRoleNames()->contains('general_user'))
     <!-- Menu User -->
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('transactions.view') }}">
+        <a class="nav-link" href="{{ route('products.view') }}">
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Produk</span></a>
     </li>
@@ -71,4 +75,5 @@
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Keranjang Belanja</span></a>
     </li>
+    @endif
 </ul>
