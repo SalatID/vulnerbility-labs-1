@@ -22,8 +22,11 @@
                     <td>{{ $product->kategory }}</td>
                     <td>${{ number_format($product->price, 2) }}</td>
                     <td>
-                        <form action="#" method="POST" style="display:inline;">
+                        <form action="{{route('cart.add')}}" method="POST" style="display:inline;">
                             @csrf
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <input type="hidden" name="quantity" value="1">
+                            <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                             <button class="btn btn-success btn-sm">Add to Cart</button>
                         </form>
                     </td>
@@ -36,4 +39,45 @@
         </tbody>
     </table>
 </div>
+<script>
+    document.querySelectorAll('form[action="{{route('cart.add')}}"]').forEach(function(form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            let obj = {};
+            formData.forEach((value, key) => {
+                obj[key] = value;
+            });
+
+            const base64Body = btoa(JSON.stringify(obj));
+
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value
+                },
+                body: JSON.stringify({ data: base64Body })
+            })
+            .then(response => response.json())
+            .then(data => {
+                let oldAlert = document.getElementById('cart-error-alert');
+                if (oldAlert) oldAlert.remove();
+
+                // Create Bootstrap alert
+                let alertDiv = document.createElement('div');
+                alertDiv.id = 'cart-error-alert';
+                alertDiv.className = 'alert alert-'+(data.error?'danger':'success')+' alert-dismissible fade show';
+                alertDiv.role = 'alert';
+                alertDiv.innerHTML = `
+                    <strong>Pesan</strong> ${data.message || 'Error adding to cart.'}
+                `;
+
+                // Append below <body>
+                document.getElementById('alert-location').appendChild(alertDiv);
+            })
+        });
+    });
+</script>
 @endsection

@@ -32,9 +32,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/transaction/{id}', [App\Http\Controllers\TransactionController::class, 'detail'])->name('transaction.detail');
 
     Route::get('/products', [App\Http\Controllers\ProductController::class, 'list'])->name('products.view');
+
     Route::post('/add-to-cart', [App\Http\Controllers\ProductController::class, 'addToCart'])->name('cart.add');
+    Route::get('/carts', [App\Http\Controllers\ProductController::class, 'cartList'])->name('carts.view');
+    Route::get('/cart/remove/{id}', [App\Http\Controllers\ProductController::class, 'cartList'])->name('cart.remove');
 
     Route::get('/users', [App\Http\Controllers\AdminController::class, 'users'])->name('users.view');
+
+    Route::get('/profile',[App\Http\Controllers\AdminController::class, 'profile'])->name('profile.view');
+    Route::put('/profile',[App\Http\Controllers\AdminController::class, 'updateProfile'])->name('profile.update');
     // Add more authenticated routes here
 });
 Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');

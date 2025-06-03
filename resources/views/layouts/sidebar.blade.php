@@ -71,7 +71,7 @@
             <span>Produk</span></a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('transactions.view') }}">
+        <a class="nav-link" href="{{ route('carts.view') }}">
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Keranjang Belanja</span></a>
     </li>
