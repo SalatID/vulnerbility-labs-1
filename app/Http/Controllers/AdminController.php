@@ -43,4 +43,18 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }
+
+    public function dashboardSummary()
+    {
+        
+        $results = \DB::select("
+            SELECT COUNT(*) as total, transaction_date, users.name
+            FROM transactions
+            JOIN users ON users.id = transactions.user_id
+            where transaction_date between '".request('start_date')."' and '".request('end_date')."'
+            GROUP BY transaction_date, users.name
+        ");
+
+        return response()->json($results);
+    }
 }

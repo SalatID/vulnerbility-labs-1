@@ -50,13 +50,6 @@
         </div>
     </li> --}}
     <!-- Nav Item - Charts -->
-    
-
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('transactions.view') }}">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Order</span></a>
-    </li>
 
     <li class="nav-item">
         <a class="nav-link" href="{{ route('users.view') }}">
