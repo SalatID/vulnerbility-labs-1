@@ -22,9 +22,16 @@ class TransactionController extends Controller
     public function detail($id)
     {
         // Example: Fetch transaction by ID (replace with actual model)
+        // $id = decrypt($id);
         $transaction = \App\Models\Transaction::find($id);
+        // $user = auth()->user();
+        // if ($transaction && !$user->getRoleNames()->contains('administrator')) {
+        //     if ($transaction->user_id !== $user->id) {
+        //     $transaction = null;
+        //     }
+        // }
         if (!$transaction) {
-            return view('page.transactions.notfound');
+            abort(404);
         }
         return view('page.transactions.detail', ['transaction' => $transaction]);
     }

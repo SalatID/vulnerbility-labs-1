@@ -24,6 +24,7 @@
                 <td>{{ $transaction->created_at->format('Y-m-d') }}</td>
                 <td>{{ number_format($transaction->amount, 2) }}</td>
                 <td>
+                    {{-- <a href="{{ route('transaction.detail', encrypt($transaction->id)) }}" class="btn btn-info btn-sm">Detail</a> --}}
                     <a href="{{ route('transaction.detail', $transaction->id) }}" class="btn btn-info btn-sm">Detail</a>
                 </td>
             </tr>

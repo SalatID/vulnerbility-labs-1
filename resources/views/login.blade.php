@@ -33,6 +33,11 @@
 
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
+                        @if ($errors->has('message'))
+                            <div class="alert alert-danger text-center m-3">
+                                {{ $errors->first('message') }}
+                            </div>
+                        @endif
                         <!-- Nested Row within Card Body -->
                         <div class="row">
                             <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>

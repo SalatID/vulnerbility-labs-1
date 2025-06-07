@@ -13,13 +13,19 @@ class AuthController extends Controller
             'password' => 'required|string|min:6',
         ]);
 
+        if (!\App\Models\User::where('email', $credentials['email'])->exists()) {
+            return redirect('/login')->withErrors([
+                'message' => 'Email Tidak Ditemukan',
+            ]);
+        }
+
         if (auth()->attempt($credentials)) {
             $request->session()->regenerate();
             return redirect('/dashboard');
         }
 
         return redirect('/login')->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'message' => 'Password Salah',
         ]);
     }
 
@@ -29,9 +35,9 @@ class AuthController extends Controller
     }
     public function logout(Request $request)
     {
-        auth()->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        // auth()->logout();
+        // $request->session()->invalidate();
+        // $request->session()->regenerateToken();
         return redirect('/login');
     }
 }
