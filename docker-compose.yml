@@ -9,6 +9,10 @@ services:
     restart: unless-stopped
     volumes:
       - .:/var/www
+    command: >
+      sh -c "chmod -R 775 storage bootstrap/cache &&
+             chown -R www:www storage bootstrap/cache &&
+             php-fpm"
     networks:
       - laravel
 
