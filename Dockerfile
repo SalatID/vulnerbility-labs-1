@@ -21,6 +21,9 @@ WORKDIR /var/www
 # Copy semua file dengan owner www
 COPY --chown=www:www . /var/www
 
+COPY start.sh /var/www/start.sh
+RUN chmod +x /var/www/start.sh
+
 # Ganti user ke www
 USER root
 
