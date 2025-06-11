@@ -22,7 +22,7 @@ WORKDIR /var/www
 COPY --chown=www:www . /var/www
 
 # Ganti user ke www
-USER www
+USER root
 
 # Set permission yang dibutuhkan Laravel
 RUN chmod -R ug+rwx storage bootstrap/cache
