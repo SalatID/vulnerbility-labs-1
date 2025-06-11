@@ -1,39 +1,31 @@
 FROM php:8.2-fpm
+
 RUN apt-get update && apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libpng-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd
-
-# Set working directory
-WORKDIR /var/www
-
-
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+    && docker-php-ext-install -j$(nproc) gd \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Add user for laravel application
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
+# Add user (uid:1000) dan group www
+RUN groupadd -g 1000 www \
+    && useradd -u 1000 -ms /bin/bash -g www www
 
-# Copy existing application directory contents
-COPY . /var/www
+# Set working directory
+WORKDIR /var/www
 
-# Copy existing application directory permissions
+# Copy semua file dengan owner www
 COPY --chown=www:www . /var/www
 
-# Set permission untuk Laravel
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 775 /var/www/storage \
-    && chmod -R 775 /var/www/bootstrap/cache
-
-# Change current user to www
+# Ganti user ke www
 USER www
 
-# Expose port 9000 and start php-fpm server
+# Set permission yang dibutuhkan Laravel
+RUN chmod -R ug+rwx storage bootstrap/cache
+
 EXPOSE 9000
 CMD ["php-fpm"]
