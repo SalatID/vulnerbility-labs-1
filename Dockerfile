@@ -32,7 +32,7 @@ RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 COPY .env.example .env
 
 # Jalankan migrasi database
-RUN php artisan migrate --no-interaction --force
+RUN php artisan migrate
 
 # Permission Laravel
 RUN chmod -R 775 storage bootstrap/cache
