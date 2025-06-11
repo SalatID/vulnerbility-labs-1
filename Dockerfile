@@ -1,37 +1,38 @@
-FROM php:8.2-fpm
+FROM php:8.2-cli
 
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-        libfreetype6-dev \
-        libjpeg62-turbo-dev \
-        libpng-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    git \
+    curl \
+    unzip \
+    libzip-dev \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    && docker-php-ext-install pdo_mysql zip
 
-# Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Add user (uid:1000) dan group www
+# Tambahkan user non-root (opsional)
 RUN groupadd -g 1000 www \
     && useradd -u 1000 -ms /bin/bash -g www www
 
 # Set working directory
 WORKDIR /var/www
 
-# Copy semua file dengan owner www
-COPY --chown=www:www . /var/www
+# Salin semua file ke dalam container
+COPY . .
 
-# Copy entrypoint ke dalam image
-COPY start.sh /usr/local/bin/start.sh
+# Install dependencies Laravel
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Set permission eksekusi
-RUN chmod +x /usr/local/bin/start.sh
+# Permission Laravel
+RUN chmod -R 775 storage bootstrap/cache
 
-# Ganti user ke www
-USER root
+# Expose port Laravel dev server
+EXPOSE 8000
 
-# Set permission yang dibutuhkan Laravel
-RUN chmod -R ug+rwx storage bootstrap/cache
-
-EXPOSE 9000
-CMD ["php-fpm"]
+# Jalankan Laravel dengan artisan serve
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]

@@ -6,32 +6,20 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: laravel_app
-    restart: unless-stopped
-    volumes:
-      - .:/var/www
-    command: /usr/local/bin/start.sh
-    networks:
-      - laravel
-
-  webserver:
-    image: nginx:alpine
-    container_name: nginx_server
-    restart: unless-stopped
     ports:
-      - "8000:443"
-      - "443:443"
+      - "8000:8000"  # expose Laravel dev server
     volumes:
       - .:/var/www
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    working_dir: /var/www
+    command: php artisan serve --host=0.0.0.0 --port=8000
     depends_on:
-      - app
+      - db
     networks:
       - laravel
 
   db:
     image: mysql:8.0
     container_name: mysql_db
-    restart: unless-stopped
     ports:
       - "3306:3306"
     environment:
