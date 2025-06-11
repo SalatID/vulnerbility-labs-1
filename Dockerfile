@@ -21,8 +21,11 @@ WORKDIR /var/www
 # Copy semua file dengan owner www
 COPY --chown=www:www . /var/www
 
-COPY start.sh /var/www/start.sh
-RUN chmod +x /var/www/start.sh
+# Copy entrypoint ke dalam image
+COPY start.sh /usr/local/bin/start.sh
+
+# Set permission eksekusi
+RUN chmod +x /usr/local/bin/start.sh
 
 # Ganti user ke www
 USER root

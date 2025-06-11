@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
     volumes:
       - .:/var/www
-    command: /var/www/start.sh
+    command: /usr/local/bin/start.sh
     networks:
       - laravel
 
