@@ -24,6 +24,13 @@ WORKDIR /var/www
 # Copy Laravel files
 COPY . .
 
+# Install Laravel dependencies
+RUN composer install --no-interaction --optimize-autoloader
+# Generate application key
+RUN php artisan key:generate
+# Set environment variables 
+RUN cp .env.example .env
+
 # Set file permissions
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www
