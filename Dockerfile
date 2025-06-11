@@ -26,10 +26,10 @@ COPY . .
 
 # Install Laravel dependencies
 RUN composer install --no-interaction --optimize-autoloader
-# Generate application key
-RUN php artisan key:generate
 # Set environment variables 
 RUN cp .env.example .env
+# Generate application key
+RUN php artisan key:generate
 
 # Set file permissions
 RUN chown -R www-data:www-data /var/www \
