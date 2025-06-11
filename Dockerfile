@@ -28,6 +28,12 @@ COPY . .
 # Install dependencies Laravel
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
+# Salin file .env ke dalam container
+COPY .env.example .env
+
+# Jalankan migrasi database
+RUN php artisan migrate --no-interaction --force
+
 # Permission Laravel
 RUN chmod -R 775 storage bootstrap/cache
 
